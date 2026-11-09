@@ -1,0 +1,32 @@
+<div class="bg-image vh-100 d-flex flex-column justify-content-center vw-100 text-center px-2 border align-items-center" style="background-image: url('background.jpg');">
+    <div class="text-center align-middle py-5 px-3 m-2 font-monospace shadow-lg w-50 bg-dark bg-opacity-25 rounded-5">
+        <h2 class="p-1 bg-dark text-light rounded-4 fw-bolder fs-2">Participant Login Page</h2>
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm"> 
+            <div class="py-2 rounded-4">
+                <label class="fw-bolder">Username</label> <br>
+                <input type="text" [(ngModel)]="username" placeholder="username" class="w-100 py-2 text-center" name="username" #userCtrl="ngModel" required/>
+            </div>
+            <div class="py-2 bg-opacity-25 rounded-4">
+                <label class="fw-bolder">Password</label> <br>
+                <input type="password" name="password" placeholder="***" class="w-100 py-2 text-center" aria-describedby="addon2" aria-label="password" [(ngModel)]="password" required />
+            </div>
+            
+            <button class="btn btn-primary my-2 w-100 btn-lg" type="submit" [disabled]="loginForm.invalid">Login</button>
+
+            @if (submitted()) {
+                @if(!errorMessage()) {
+                    <div class="alert alert-success py-2 fixed-bottom">
+                        <strong>Login Succesful.</strong> <br> <br> Redirecting... <br>
+                        <div class="spinner-border"></div>
+                    </div>
+                }
+                @else {
+                    <div class="alert alert-danger py-3 bg-danger bg-opacity-75 shadow-sm fade show" role="alert">
+                        <h3>{{errorMessage()}}</h3>
+                    </div>
+                }
+            }
+        </form>
+
+    </div>
+</div>
