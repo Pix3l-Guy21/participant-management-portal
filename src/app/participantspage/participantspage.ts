@@ -57,8 +57,17 @@ export class Participantspage {
       status: "ACTIVE"
     }
   ];
+  filteredBanks: Participants[] = this.banks;
   private router = inject(Router);
   public logout() {
     this.router.navigate(['/login']);
+  }
+  public filterResults(text: string) {
+    if(!text) {
+      this.filteredBanks = this.banks;
+      return;
+    }
+    this.filteredBanks = this.banks.filter((banks) => 
+      banks.name.toLowerCase().includes(text.toLowerCase()));
   }
 }

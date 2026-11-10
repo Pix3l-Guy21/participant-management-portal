@@ -8,13 +8,21 @@
     <div class="container-fluid px-4 py-4">
         
         <div class="mb-4">
-            <h1 class="h3 fw-bold text-dark mb-1">Welcome to the Participant Management Portal</h1>
-            <p class="text-muted small">Manage and review participant bank details below.</p>
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Welcome to the Participant Management Portal</h1>
+                <p class="text-muted small">Manage and review participant bank details below.</p>
+            </div>
         </div>
 
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-            <div class="p-3 border-bottom bg-light">
+            <div class="p-3 border-bottom bg-light d-flex align-items-center justify-content-between flex-wrap gap-3">
                 <h3 class="h5 fw-semibold text-secondary mb-0">Current Participants</h3>
+                <div class="input-group" style="max-width: 40%;">
+                    <input type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" #filter />
+                    <button type="button" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(filter.value)">
+                        Search
+                    </button>
+                </div>
             </div>
             
             <div class="table-responsive mb-0">
@@ -31,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (item of banks; track item.id) {
+                        @for (item of filteredBanks; track item.id) {
                             <tr>
                                 <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
                                 <td class="fw-medium text-dark">{{item.name}}</td>
