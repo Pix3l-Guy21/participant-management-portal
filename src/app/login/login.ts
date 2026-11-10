@@ -22,7 +22,7 @@ export class Login {
     this.loginService.login(this.username, this.password);
     this.submitted.set(true);
     if (!this.errorMessage()) {
-      // this.router.navigate(['/participants']);
+      this.router.navigate(['/participants']);
     }
   } 
 }
