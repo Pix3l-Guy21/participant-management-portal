@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [FormsModule],
@@ -11,6 +12,8 @@ import { AuthService } from '../auth-service';
 })
 export class Login {
   private loginService = inject(AuthService);
+  private router = inject(Router);
+  
   username = '';
   password = '';
   submitted = signal(false);
@@ -18,5 +21,8 @@ export class Login {
   onSubmit() {
     this.loginService.login(this.username, this.password);
     this.submitted.set(true);
+    if (!this.errorMessage()) {
+      this.router.navigate(['/participants']);
+    }
   } 
 }

@@ -3,14 +3,14 @@
         <h2 class="p-1 bg-dark text-light rounded-4 fw-bolder fs-2">Participant Login Page</h2>
         <form (ngSubmit)="onSubmit()" #loginForm="ngForm"> 
             <div class="py-2 rounded-4">
-                <label class="fw-bolder fs-4 text-white">Username</label> <br>
+                <label class="fw-bolder fs-4 text-body">Username</label> <br>
                 <input type="text" [(ngModel)]="username" placeholder="username" class="w-100 py-2 text-center" name="username" #userCtrl="ngModel" required/>
                 @if (userCtrl.invalid && (userCtrl.touched || userCtrl.dirty || submitted()) && userCtrl.hasError('required')) {
                     <p class="text-danger">username required.</p>
                 }
             </div>
             <div class="py-2 bg-opacity-25 rounded-4">
-                <label class="fw-bolder text-white fs-4">Password</label> <br>
+                <label class="fw-bolder text-body fs-4">Password</label> <br>
                 <input type="password" name="password" placeholder="***" class="w-100 py-2 text-center" aria-describedby="addon2" #userCtrl2="ngModel" aria-label="password" [(ngModel)]="password" required />
                 @if (userCtrl2.invalid && (userCtrl2.touched || userCtrl2.dirty || submitted()) && userCtrl2.hasError('required')) {
                     <p class="text-danger">password required.</p>
