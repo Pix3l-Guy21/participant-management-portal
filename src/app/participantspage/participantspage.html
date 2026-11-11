@@ -7,10 +7,13 @@
 
     <div class="container-fluid px-4 py-4">
         
-        <div class="mb-4">
-            <div>
+        <div class="mb-4 d-flex align-items-center justify-content-between">
+            <div class="border mr-4">
                 <h1 class="h3 fw-bold mb-1">Welcome to the Participant Management Portal</h1>
                 <p class="small">Manage and review participant bank details below.</p>
+            </div>
+            <div class="p-4">
+                <a [routerLink]="['/participants/new']" style="background-color: #D9531E;" class="btn rounded-pill px-3 text-white">Add New Participant</a>
             </div>
         </div>
 
@@ -19,7 +22,7 @@
                 <h3 class="h5 fw-semibold mb-0" style="color: #E65100;">Current Participants</h3>
                 <div class="input-group" style="max-width: 40%;">
                     <input [(ngModel)]="searchTerm" type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" (ngModelChange)="filterResults(searchTerm)" />
-                    <button type="button" style="background-color: #D9531E;" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(searchTerm)">
+                    <button type="button" style="background-color: #D9531E;" class="btn rounded-end-pill px-3 text-white" (click)="filterResults(searchTerm)">
                         Search
                     </button>
                 </div>

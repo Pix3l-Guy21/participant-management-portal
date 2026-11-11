@@ -1,0 +1,99 @@
+<div class="d-flex flex-column vh-100 align-items-center justify-content-center" style="background-color: #ebebdf;">
+    <div class="card shadow-lg border-0 rounded-3" style="background-color: #F9F7F1;">
+        <div style="color: #ebebdf; background-color: #e9631a;" class="p-3 rounded-top-3">
+            <h3 class="fw-bold">Participant Bank Registration Form</h3>
+            <p class="small">Please fillout the form properly.</p>
+            <small style="background-color: #F9F7F1;" class="rounded-pill px-2 text-dark"><span class="text-danger">*</span> Required</small>
+        </div>
+        <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm" class="p-3">
+            <div class="mb-3">
+                <label class="form-label" for="name" >Name of the Bank<span class="text-danger">*</span></label>
+                <input class="form-control form-control-lg" type="text" name="name" id="name" [(ngModel)]="name" #nameCtrl="ngModel" required />
+                @if (nameCtrl.invalid && (nameCtrl.touched || nameCtrl.dirty) && nameCtrl.hasError('required')) {
+                    <div class="text-danger small mt-1">Name is required.</div>
+                }
+            </div>
+            <div class="mb-3">
+                <label for="bic">BIC<span class="text-danger">*</span></label>
+                <input class="form-control form-control-lg" [(ngModel)]="bic" minlength="11" #bicCtrl="ngModel" maxlength="11" type="text" name="bic" id="bic" required/>
+                @if (bicCtrl.invalid && (bicCtrl.touched || bicCtrl.dirty)) {
+                    @if (bicCtrl.hasError('required')) {
+                        <small class="text-danger small mt-1">BIC is required.</small>
+                    }
+                    @else if (bicCtrl.hasError('minlength')) {
+                        <small class="text-danger small mt-1">BIC is too short.</small>
+                    }
+                    @else if (bicCtrl.hasError('maxlength')) {
+                        <small>BIC too long.</small>
+                    }
+                }
+            </div>
+            <div class="mb-3">
+                <label for="shortName" >Short Name<span class="text-danger">*</span></label>
+                <input class="form-control form-control-lg" type="text" name="shortName" [(ngModel)]="shortName" id="shortName" #shortCtrl="ngModel" required />
+                @if (shortCtrl.invalid && (shortCtrl.touched || shortCtrl.dirty)) {
+                    @if (shortCtrl.hasError('required')) {
+                        <small class="text-danger small mt-1">Short Name is required.</small>
+                    }
+                }
+            </div>
+            <div class="mb-3">
+                <label for="email" >Email<span class="text-danger">*</span></label>
+                <input class="form-control form-control-lg" type="email" name="email" id="email" [(ngModel)]="email" #emailCtrl="ngModel" required />
+                @if (emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)) {
+                    <div class="text-danger mt-1">
+                        @if (emailCtrl.errors?.['required']) {
+                        <small>Email is required.</small>
+                        }
+                        @if (emailCtrl.errors?.['email']) {
+                        <small>Please enter a valid email address.</small>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number<span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text">+251</span>
+                    <input class="form-control form-control-lg" type="number" name="phone" id="phone" [(ngModel)]="phoneNumber" #phoneCtrl="ngModel" required />
+                </div>
+                @if (phoneCtrl.invalid && (phoneCtrl.dirty || phoneCtrl.touched)) {
+                    <div class="text-danger mt-1">
+                        @if (phoneCtrl.errors?.['required']) {
+                        <small>Valid Phone number is required.</small>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    role="switch" 
+                    id="status"
+                    (change)="onToggleChange()">
+                    
+                    <label class="form-check-label" for="status">
+                        Status ({{ isActive() ? 'ACTIVE' : 'INACTIVE' }})
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <button class="btn text-white btn-lg py-2 mb-3 w-75 shadow-sm" style="background-color: #D9531E;" 
+                    onmouseenter="this.style.backgroundColor='#BF4314'" 
+                    onmouseleave="this.style.backgroundColor='#D9531E'" 
+                    type="submit">
+                        Register
+                </button>
+                <button class="btn btn-lg py-2 mb-3 shadow-sm" style="background-color: #fff; color: #D9531E;" 
+                    onmouseenter="this.style.backgroundColor='#e9e9e9'" 
+                    onmouseleave="this.style.backgroundColor='#fff'" 
+                    type="button" (click)="cancel()">
+                        Cancel
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
