@@ -63,11 +63,16 @@ export class Participantspage {
     this.router.navigate(['/login']);
   }
   public filterResults(text: string) {
-    if(!text) {
+    if(!text || text.trim() === '') {
       this.filteredBanks = this.banks;
       return;
     }
-    this.filteredBanks = this.banks.filter((banks) => 
-      banks.name.toLowerCase().includes(text.toLowerCase()));
+    const searchTerm = text.toLowerCase().trim();
+    this.filteredBanks = this.banks.filter((bank) => {
+      const filteredByName = bank.name.toLowerCase().includes(searchTerm); 
+      const filteredByStatus = bank.status.toLowerCase() === searchTerm;
+      return filteredByName || filteredByStatus;
+    }
+      );
   }
 }

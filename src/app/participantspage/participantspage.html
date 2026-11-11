@@ -1,7 +1,7 @@
-<div class="vh-100 overflow-auto" style="background-color: #F8FAFC; color: #0F172A;">
+<div class="vh-100 overflow-auto" style="background-color: #ebebdf; color: #e9631a;">
     
-    <nav class="navbar px-4 py-3 shadow-sm" style="background-color: #0F172A;">
-        <h2 class="h5 text-white mb-0 fw-bold">Participant Management Portal</h2>
+    <nav class="navbar px-4 py-3 shadow-sm" style="background-color: #e9631a; color: #ebebdf;">
+        <h2 class="h5 mb-0 fw-bold">Participant Management Portal</h2>
         <button class="btn btn-outline-light btn-sm px-3" role="button" (click)="logout()">Logout</button>
     </nav>
 
@@ -9,25 +9,25 @@
         
         <div class="mb-4">
             <div>
-                <h1 class="h3 fw-bold text-dark mb-1">Welcome to the Participant Management Portal</h1>
-                <p class="text-muted small">Manage and review participant bank details below.</p>
+                <h1 class="h3 fw-bold mb-1">Welcome to the Participant Management Portal</h1>
+                <p class="small">Manage and review participant bank details below.</p>
             </div>
         </div>
 
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-            <div class="p-3 border-bottom bg-light d-flex align-items-center justify-content-between flex-wrap gap-3">
-                <h3 class="h5 fw-semibold text-secondary mb-0">Current Participants</h3>
+            <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3" style="background-color: #F5F3EA;">
+                <h3 class="h5 fw-semibold mb-0" style="color: #E65100;">Current Participants</h3>
                 <div class="input-group" style="max-width: 40%;">
                     <input type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" #filter />
-                    <button type="button" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(filter.value)">
+                    <button type="button" style="background-color: #D9531E;" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(filter.value)">
                         Search
                     </button>
                 </div>
             </div>
             
             <div class="table-responsive mb-0">
-                <table class="table table-hover align-middle mb-0">
-                    <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7">
+                <table class="table table-hover align-middle mb-0" style="color: #2C2A29;">
+                    <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
                         <tr>
                             <th class="ps-4 py-3">Id</th>
                             <th class="py-3">Name</th>
