@@ -18,8 +18,8 @@
             <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3" style="background-color: #F5F3EA;">
                 <h3 class="h5 fw-semibold mb-0" style="color: #E65100;">Current Participants</h3>
                 <div class="input-group" style="max-width: 40%;">
-                    <input type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" #filter />
-                    <button type="button" style="background-color: #D9531E;" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(filter.value)">
+                    <input [(ngModel)]="searchTerm" type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" (ngModelChange)="filterResults(searchTerm)" />
+                    <button type="button" style="background-color: #D9531E;" class="btn btn-dark rounded-end-pill px-3 text-white" (click)="filterResults(searchTerm)">
                         Search
                     </button>
                 </div>
@@ -63,6 +63,9 @@
                         }
                     </tbody>
                 </table>
+                @if (filteredBanks.length == 0) {
+                    <p class="mx-2 p-3 text-center" style="color: #D9531E">No participant banks found</p>
+                }
             </div>
         </div>
     </div>

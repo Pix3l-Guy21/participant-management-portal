@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Participants } from '../participants';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   selector: 'app-participantspage',
   styleUrl: './participantspage.css',
   templateUrl: './participantspage.html',
@@ -58,6 +59,7 @@ export class Participantspage {
     }
   ];
   filteredBanks: Participants[] = this.banks;
+  searchTerm: string = '';
   private router = inject(Router);
   public logout() {
     this.router.navigate(['/login']);
