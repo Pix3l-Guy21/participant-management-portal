@@ -66,4 +66,22 @@ export class ParticipantService {
         }
     )
   }
+
+  public getParticipantById(id: number): Participants | any {
+    return this.participants.find(p => p.id === id);
+  }
+
+  public updateParticipant(id: number, updatedData: Partial<Participants>): boolean {
+    const index = this.participants.findIndex(p => p.id === id);
+
+    if(index !== -1) {
+      this.participants[index] = {
+        ...this.participants[index],
+        ...updatedData,
+        id
+      };
+      return true;
+    }
+    return false;
+  }
 }

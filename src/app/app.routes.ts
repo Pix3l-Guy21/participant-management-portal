@@ -7,5 +7,6 @@ export const routes: Routes = [
     {path: 'login', component: Login},
     {path: 'participants', component: Participantspage},
     {path: 'participants/new', component: ParticipantRegisterationForm},
+    {path: 'participants/edit/:id', component: ParticipantRegisterationForm},
     {path: '', redirectTo: 'login', pathMatch: 'full'}
 ];

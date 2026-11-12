@@ -1,14 +1,14 @@
 <div class="vh-100 overflow-auto" style="background-color: #ebebdf; color: #e9631a;">
     
-    <nav class="navbar px-4 py-3 shadow-sm" style="background-color: #e9631a; color: #ebebdf;">
+    <nav class="navbar fixed-top px-4 py-3 shadow-sm" style="background-color: #e9631a; color: #ebebdf;">
         <h2 class="h5 mb-0 fw-bold">Participant Management Portal</h2>
         <button class="btn btn-outline-light btn-sm px-3" role="button" (click)="logout()">Logout</button>
     </nav>
 
-    <div class="container-fluid px-4 py-4">
+    <div class="container-fluid mt-5 px-4 py-4">
         
         <div class="mb-4 d-flex align-items-center justify-content-between">
-            <div class="border mr-4">
+            <div class="mr-4">
                 <h1 class="h3 fw-bold mb-1">Welcome to the Participant Management Portal</h1>
                 <p class="small">Manage and review participant bank details below.</p>
             </div>
@@ -61,6 +61,13 @@
                                     }">
                                         {{item.status}}
                                     </span>
+                                </td>
+                                <td>
+                                    <button class="btn-sm border-0 rounded-pill px-2" 
+                                        style="background-color: #e9631a; color: #fff"
+                                        type="button" (click)="participantEdit(item.id)">
+                                            Edit
+                                    </button>
                                 </td>
                             </tr>
                         }

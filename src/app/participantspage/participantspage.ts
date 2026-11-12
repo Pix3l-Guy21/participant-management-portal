@@ -24,6 +24,7 @@ export class Participantspage {
   public logout() {
     this.router.navigate(['/login']);
   }
+
   public filterResults(text: string) {
     if(!text || text.trim() === '') {
       this.filteredBanks = this.banks;
@@ -36,5 +37,9 @@ export class Participantspage {
       return filteredByName || filteredByStatus;
     }
       );
+  }
+
+  public participantEdit(id: number){
+    this.router.navigate(['/participants/edit', id])
   }
 }
