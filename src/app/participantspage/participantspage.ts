@@ -32,7 +32,7 @@ export class Participantspage {
     }
     const searchTerm = text.toLowerCase().trim();
     this.filteredBanks = this.banks.filter((bank) => {
-      const filteredByName = bank.name.toLowerCase().includes(searchTerm); 
+      const filteredByName = bank.name?.toLowerCase().includes(searchTerm); 
       const filteredByStatus = bank.status.toLowerCase() === searchTerm;
       return filteredByName || filteredByStatus;
     }

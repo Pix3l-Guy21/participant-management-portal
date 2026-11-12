@@ -16,36 +16,36 @@
             </div>
         }
         
-        <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm" class="p-3">
+        <form (ngSubmit)="onSubmit()" [formGroup]="participantForm" class="p-3">
             <div class="mb-3">
                 <label class="form-label" for="name" >Name of the Bank<span class="text-danger">*</span></label>
-                <input class="form-control form-control-lg" type="text" name="name" id="name" [(ngModel)]="name" #nameCtrl="ngModel" required />
-                @if (nameCtrl.invalid && (nameCtrl.touched || nameCtrl.dirty) && nameCtrl.hasError('required')) {
+                <input class="form-control form-control-lg" type="text" name="name" id="name" formControlName="name" required />
+                @if (getField('name')?.hasError('required') && (getField('name')?.touched || getField('name')?.dirty)) {
                     <div class="text-danger small mt-1">Name is required.</div>
                 }
             </div>
             
             <div class="mb-3">
                 <label for="bic">BIC<span class="text-danger">*</span></label>
-                <input class="form-control form-control-lg" [(ngModel)]="bic" minlength="11" #bicCtrl="ngModel" maxlength="11" type="text" name="bic" id="bic" required/>
-                @if (bicCtrl.invalid && (bicCtrl.touched || bicCtrl.dirty)) {
-                    @if (bicCtrl.hasError('required')) {
+                <input class="form-control form-control-lg" minlength="11" maxlength="11" type="text" name="bic" id="bic" formControlName="bic" required/>
+                @if (getField('bic')?.touched || getField('bic')?.dirty) {
+                    @if (getField('bic')?.hasError('required')) {
                         <small class="text-danger small mt-1">BIC is required.</small>
                     }
-                    @else if (bicCtrl.hasError('minlength')) {
+                    @else if (getField('bic')?.hasError('minlength')) {
                         <small class="text-danger small mt-1">BIC is too short.</small>
                     }
-                    @else if (bicCtrl.hasError('maxlength')) {
-                        <small>BIC too long.</small>
+                    @else if (getField('bic')?.hasError('pattern')) {
+                        <small class="text-danger small mt-1">Invalid BIC.</small>
                     }
                 }
             </div>
             
             <div class="mb-3">
                 <label for="shortName" >Short Name<span class="text-danger">*</span></label>
-                <input class="form-control form-control-lg" type="text" name="shortName" [(ngModel)]="shortName" id="shortName" #shortCtrl="ngModel" required />
-                @if (shortCtrl.invalid && (shortCtrl.touched || shortCtrl.dirty)) {
-                    @if (shortCtrl.hasError('required')) {
+                <input class="form-control form-control-lg" type="text" name="shortName" id="shortName" formControlName="shortName" required />
+                @if (getField('shortName')?.touched || getField('shortName')?.dirty) {
+                    @if (getField('shortName')?.hasError('required')) {
                         <small class="text-danger small mt-1">Short Name is required.</small>
                     }
                 }
@@ -53,14 +53,15 @@
             
             <div class="mb-3">
                 <label for="email" >Email<span class="text-danger">*</span></label>
-                <input class="form-control form-control-lg" type="email" name="email" id="email" [(ngModel)]="email" #emailCtrl="ngModel" required />
-                @if (emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)) {
+                <input class="form-control form-control-lg" type="email" name="email" id="email" formControlName="email" required />
+                @if (getField('email')?.invalid && (getField('email')?.dirty || getField('email')?.touched)) {
                     <div class="text-danger mt-1">
-                        @if (emailCtrl.errors?.['required']) {
-                        <small>Email is required.</small>
+                        @if (getField('email')?.hasError('required') && (getField('email')?.touched || getField('email')?.dirty)) {
+                            <div class="text-danger small mt-1">Email is required.</div>
                         }
-                        @if (emailCtrl.errors?.['email']) {
-                        <small>Please enter a valid email address.</small>
+
+                        @if (getField('email')?.hasError('email') && (getField('email')?.touched || getField('email')?.dirty)) {
+                            <div class="text-danger small mt-1">Please enter a valid email address.</div>
                         }
                     </div>
                 }
@@ -70,14 +71,14 @@
                 <label for="phone" class="form-label">Phone Number<span class="text-danger">*</span></label>
                 <div class="input-group">
                     <span class="input-group-text">+251</span>
-                    <input class="form-control form-control-lg" type="number" name="phone" id="phone" [(ngModel)]="phoneNumber" #phoneCtrl="ngModel" required />
+                    <input class="form-control form-control-lg" type="tel" name="phone" id="phone" formControlName="phoneNumber" required />
                 </div>
-                @if (phoneCtrl.invalid && (phoneCtrl.dirty || phoneCtrl.touched)) {
-                    <div class="text-danger mt-1">
-                        @if (phoneCtrl.errors?.['required']) {
-                        <small>Valid Phone number is required.</small>
-                        }
-                    </div>
+                @if (getField('phoneNumber')?.hasError('required') && (getField('phoneNumber')?.touched || getField('phoneNumber')?.dirty)) {
+                    <div class="text-danger small mt-1">Phone number is required.</div>
+                }
+
+                @if (getField('phoneNumber')?.hasError('minlength') && (getField('phoneNumber')?.touched || getField('phoneNumber')?.dirty)) {
+                    <div class="text-danger small mt-1">Phone number is too short.</div>
                 }
             </div>
             
@@ -88,11 +89,10 @@
                     type="checkbox" 
                     role="switch" 
                     id="status"
-                    [checked]="isActive()"
-                    (change)="toggleStatus()">
+                    formControlName="status">
                     
                     <label class="form-check-label" for="status">
-                        Status ({{ isActive() ? 'ACTIVE' : 'INACTIVE' }})
+                        Status ({{ getField('status')?.value ? 'ACTIVE' : 'INACTIVE' }})
                     </label>
                 </div>
             </div>
@@ -101,7 +101,8 @@
                 <button class="btn text-white btn-lg py-2 mb-3 w-75 shadow-sm" style="background-color: #D9531E;" 
                     onmouseenter="this.style.backgroundColor='#BF4314'" 
                     onmouseleave="this.style.backgroundColor='#D9531E'" 
-                    type="submit">
+                    type="submit" [disabled]="!participantForm.valid"
+                    >
                         @if(isEditMode()){
                             Apply Edit
                         }

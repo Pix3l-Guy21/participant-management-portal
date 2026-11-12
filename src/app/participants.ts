@@ -1,6 +1,6 @@
 export interface Participants {
     id: number;
-    name: string;
+    name: string | null;
     bic: string;
     shortName: string;
     email: string;
