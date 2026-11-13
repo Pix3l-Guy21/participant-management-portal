@@ -21,59 +21,78 @@
             <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3" style="background-color: #F5F3EA;">
                 <h3 class="h5 fw-semibold mb-0" style="color: #E65100;">Current Participants</h3>
                 <div class="input-group" style="max-width: 40%;">
-                    <input [(ngModel)]="searchTerm" type="text" class="form-control rounded-start-pill ps-3" placeholder="Search by name or status..." aria-label="Search" (ngModelChange)="filterResults(searchTerm)" />
-                    <button type="button" style="background-color: #D9531E;" class="btn rounded-end-pill px-3 text-white" (click)="filterResults(searchTerm)">
+                    <input type="text" class="form-control rounded-start-pill ps-3" placeholder="Search..." aria-label="Search" #searchTerm (input)="filterResults(searchTerm.value)" />
+                    <button type="button" style="background-color: #D9531E;" class="btn rounded-end-pill px-3 text-white" (click)="filterResults(searchTerm.value)">
                         Search
                     </button>
                 </div>
             </div>
             
             <div class="table-responsive mb-0">
-                <table class="table table-hover align-middle mb-0" style="color: #2C2A29;">
-                    <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
-                        <tr>
-                            <th class="ps-4 py-3">Id</th>
-                            <th class="py-3">Name</th>
-                            <th class="py-3">BIC</th>
-                            <th class="py-3">Shorthand</th>
-                            <th class="py-3">Email</th>
-                            <th class="py-3">Phone Number</th>
-                            <th class="text-center pe-4 py-3">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (item of filteredBanks; track item.id) {
+                @if (isLoading()) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-muted mt-2">Loading participants...</p>
+                    </div>
+                }
+                @else {
+                    <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29;">
+                        <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
                             <tr>
-                                <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
-                                <td class="fw-medium text-dark">{{item.name}}</td>
-                                <td>
-                                    <code class="text-indigo fw-bold" style="color: #4338CA;">{{item.bic}}</code>
-                                </td>
-                                <td class="text-muted">{{item.shortName}}</td>
-                                <td>
-                                    <a href="mailto:{{item.email}}" class="text-decoration-none text-primary">{{item.email}}</a>
-                                </td>
-                                <td class="text-muted">{{item.phoneNumber}}</td>
-                                <td class="text-center pe-4">
-                                    <span class="badge rounded-pill px-3 py-2 fw-semibold" [ngClass]="{
-                                        'bg-success bg-opacity-10 text-success': item.status === 'ACTIVE',
-                                        'bg-secondary bg-opacity-25 text-secondary': item.status === 'INACTIVE'
-                                    }">
-                                        {{item.status}}
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="btn-sm border-0 rounded-pill px-2" 
-                                        style="background-color: #e9631a; color: #fff"
-                                        type="button" (click)="participantEdit(item.id)">
-                                            Edit
-                                    </button>
-                                </td>
+                                <th class="ps-4 py-3">Id</th>
+                                <th class="py-3">Name</th>
+                                <th class="py-3">BIC</th>
+                                <th class="py-3">Shorthand</th>
+                                <th class="py-3">Address</th>
+                                <th class="py-3">Email</th>
+                                <th class="py-3">Phone Number</th>
+                                <th class="text-center pe-4 py-3">Status</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-                @if (filteredBanks.length == 0) {
+                        </thead>
+                        <tbody>
+                            @for (item of filteredBanks(); track item.id) {
+                                <tr>
+                                    <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
+                                    <td class="fw-medium text-dark">{{item.name}}</td>
+                                    <td>
+                                        <code class="text-indigo fw-bold" style="color: #4338CA;">{{item.bic}}</code>
+                                    </td>
+                                    <td class="text-muted">{{item.shortName}}</td>
+                                    <td class="text-muted">{{item.address}}</td>
+                                    <td>
+                                        <a href="mailto:{{item.email}}" class="text-decoration-none text-primary">{{item.email}}</a>
+                                    </td>
+                                    <td class="text-muted">{{item.phoneNumber}}</td>
+                                    <td class="text-center pe-4">
+                                        <span class="badge rounded-pill px-3 py-2 fw-semibold" [ngClass]="{
+                                            'bg-success bg-opacity-10 text-success': item.status === 'ACTIVE',
+                                            'bg-secondary bg-opacity-25 text-secondary': item.status === 'INACTIVE'
+                                        }">
+                                            {{item.status}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-sm border-0 rounded-pill px-2" 
+                                            style="background-color: #e9631a; color: #fff"
+                                            type="button" (click)="participantEdit(item.id)">
+                                                Edit
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn-sm border-0 rounded-pill px-2" 
+                                            style="background-color: #a72406; color: #fff"
+                                            type="button">
+                                                Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            }
+                @if (!loadingError() && filteredBanks().length === 0) {
                     <p class="mx-2 p-3 text-center" style="color: #D9531E">No participant banks found</p>
                 }
             </div>

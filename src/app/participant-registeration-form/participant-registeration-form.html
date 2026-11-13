@@ -50,7 +50,13 @@
                     }
                 }
             </div>
-            
+            <div class="mb-3">
+                <label class="form-label" for="address" >Address<span class="text-danger">*</span></label>
+                <input class="form-control form-control-lg" type="text" name="address" id="address" formControlName="address" required />
+                @if (getField('address')?.hasError('required') && (getField('address')?.touched || getField('address')?.dirty)) {
+                    <div class="text-danger small mt-1">Address is required.</div>
+                }
+            </div>
             <div class="mb-3">
                 <label for="email" >Email<span class="text-danger">*</span></label>
                 <input class="form-control form-control-lg" type="email" name="email" id="email" formControlName="email" required />

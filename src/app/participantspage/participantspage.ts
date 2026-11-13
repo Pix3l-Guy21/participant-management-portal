@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Participants } from '../participants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ParticipantService } from '../participant-service';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   imports: [CommonModule, FormsModule, RouterLink],
@@ -16,27 +17,41 @@ export class Participantspage {
   private router = inject(Router);
   private pService = inject(ParticipantService);
 
-  searchTerm: string = '';
+  isLoading = signal(true);
+  searchTerm = signal('');
+  loadingError = signal('');
 
-  banks: Participants[] = this.pService.getParticipants();
-  filteredBanks: Participants[] = this.banks;
+  banks = signal<Participants[]>([]);
+
+  filteredBanks = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    const banks = this.banks();
+
+    if (!term) return banks;
+
+    return banks.filter(bank =>
+      bank.name?.toLowerCase().includes(term) ||
+      bank.status?.toLowerCase() === term
+    );
+  });
+
+  ngOnInit(): void {
+    this.pService.getParticipants().pipe(
+      finalize(() => this.isLoading.set(false))
+    ).subscribe({
+      next: (data) => {
+        this.banks.set(data);
+      },
+      error: (err) => this.loadingError.set("Failed to load data.")
+    });
+  }
   
   public logout() {
     this.router.navigate(['/login']);
   }
 
-  public filterResults(text: string) {
-    if(!text || text.trim() === '') {
-      this.filteredBanks = this.banks;
-      return;
-    }
-    const searchTerm = text.toLowerCase().trim();
-    this.filteredBanks = this.banks.filter((bank) => {
-      const filteredByName = bank.name?.toLowerCase().includes(searchTerm); 
-      const filteredByStatus = bank.status.toLowerCase() === searchTerm;
-      return filteredByName || filteredByStatus;
-    }
-      );
+  filterResults(text: string) {
+    this.searchTerm.set(text);
   }
 
   public participantEdit(id: number){
