@@ -27,7 +27,7 @@
             
             <div class="mb-3">
                 <label for="bic">BIC<span class="text-danger">*</span></label>
-                <input class="form-control form-control-lg" minlength="11" maxlength="11" type="text" name="bic" id="bic" formControlName="bic" required/>
+                <input class="form-control form-control-lg" minlength="8" maxlength="11" type="text" name="bic" id="bic" formControlName="bic" required/>
                 @if (getField('bic')?.touched || getField('bic')?.dirty) {
                     @if (getField('bic')?.hasError('required')) {
                         <small class="text-danger small mt-1">BIC is required.</small>

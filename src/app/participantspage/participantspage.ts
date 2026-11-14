@@ -35,7 +35,7 @@ export class Participantspage {
     );
   });
 
-  ngOnInit(): void {
+  loadParticipants() {
     this.pService.getParticipants().pipe(
       finalize(() => this.isLoading.set(false))
     ).subscribe({
@@ -45,6 +45,10 @@ export class Participantspage {
       error: (err) => this.loadingError.set("Failed to load data.")
     });
   }
+
+  ngOnInit(): void {
+    this.loadParticipants();
+  }
   
   public logout() {
     this.router.navigate(['/login']);
@@ -53,7 +57,11 @@ export class Participantspage {
   filterResults(text: string) {
     this.searchTerm.set(text);
   }
-
+  public deleteParticipant(id: number){
+    return this.pService.deleteParticipantById(id).subscribe(
+      () => this.loadParticipants()
+    )
+  }
   public participantEdit(id: number){
     this.router.navigate(['/participants/edit', id])
   }

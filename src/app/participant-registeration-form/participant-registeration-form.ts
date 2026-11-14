@@ -19,7 +19,7 @@ export class ParticipantRegisterationForm implements OnInit {
 
   participantForm = this.formBuilder.group({
     name: ['', Validators.required],
-    bic: ['', [Validators.required, Validators.minLength(11), Validators.pattern('^[a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?$')]],
+    bic: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^[a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?$')]],
     email: ['', [Validators.required, Validators.email]],
     shortName: ['', Validators.required],
     address: ['', Validators.required],
@@ -60,22 +60,26 @@ export class ParticipantRegisterationForm implements OnInit {
       }).subscribe({
           next: (ok) => {
           console.log("update status: ", ok)
+          this.router.navigate(['/participants']);
         }
       });
     } else {
-      this.pService.addParticipant(
-        this.getField('name')?.value,
-        this.getField('bic')?.value.toUpperCase(),
-        this.getField('shortName')?.value,
-        this.getField('address')?.value,
-        this.getField('email')?.value,
-        
-        formattedPhoneNumber,
-        this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
-      );
+      this.pService.addParticipant({
+        name: this.getField('name')?.value,
+        bic: this.getField('bic')?.value.toUpperCase(),
+        shortName: this.getField('shortName')?.value,
+        address: this.getField('address')?.value,
+        email: this.getField('email')?.value,
+        phoneNumber: formattedPhoneNumber,
+        status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
+      }).subscribe({
+        next: () => this.router.navigate(['/participants']),
+        error: (err) => console.error('Failed to add participant', err)
+      });
     }
     // route back
-    this.router.navigate(['/participants']);
+    
+    
   }
 
   ngOnInit() {

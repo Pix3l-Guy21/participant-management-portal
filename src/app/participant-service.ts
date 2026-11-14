@@ -16,21 +16,8 @@ export class ParticipantService {
         map(response => response.institutions)
       );
   }
-  public addParticipant(name: string, bic: string, shortName: string, address: string, email: string, phoneNumber: string, status: 'ACTIVE' | 'INACTIVE') {
-    this.newParticipant = {
-      'name': name,
-      'bic': bic,
-      'shortName': shortName,
-      'address': address,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'status': status
-    };
-    this.http.post<Participants>(this.baseUrl, this.newParticipant, {
-      'responseType': 'json'
-    }).subscribe( data => {
-      this.newParticipant = data;
-    })
+  public addParticipant(body: Omit<Participants, 'id'>): Observable<Participants> {
+    return this.http.post<Participants>(this.baseUrl, body)
   }
 
   public getParticipantById(id: number): Observable<Participants> {
@@ -39,6 +26,11 @@ export class ParticipantService {
 
   public updateParticipant(id: number, updatedData: Partial<Participants>): Observable<boolean> {
     return this.http.put<{status: string}> (`${this.baseUrl}/${id}`, updatedData).pipe(
+      map(res => res.status === 'SUCCESS')
+    )
+  }
+  public deleteParticipantById(id: number): Observable<boolean> {
+    return this.http.delete<{status: string}> (`${this.baseUrl}/${id}`).pipe(
       map(res => res.status === 'SUCCESS')
     )
   }
