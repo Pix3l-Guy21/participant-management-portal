@@ -58,9 +58,13 @@ export class Participantspage {
     this.searchTerm.set(text);
   }
   public deleteParticipant(id: number){
-    return this.pService.deleteParticipantById(id).subscribe(
-      () => this.loadParticipants()
-    )
+    if(confirm("Are you sure to delete record?")){
+      this.pService.deleteParticipantById(id).subscribe(
+        () => {
+          alert("Record deleted successfully.");
+          this.loadParticipants()
+    })
+    }
   }
   public participantEdit(id: number){
     this.router.navigate(['/participants/edit', id])

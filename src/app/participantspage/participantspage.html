@@ -91,9 +91,11 @@
                             }
                         </tbody>
                     </table>
-            }
+                }
                 @if (!loadingError() && filteredBanks().length === 0) {
                     <p class="mx-2 p-3 text-center" style="color: #D9531E">No participant banks found</p>
+                } @else if(loadingError()) {
+                    <p class="mx-2 p-3 text-center" style="color: #D9531E">Unable to load participants.</p>
                 }
             </div>
         </div>

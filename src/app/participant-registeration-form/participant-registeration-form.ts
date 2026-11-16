@@ -59,7 +59,6 @@ export class ParticipantRegisterationForm implements OnInit {
         status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
       }).subscribe({
           next: (ok) => {
-          console.log("update status: ", ok)
           this.router.navigate(['/participants']);
         }
       });
@@ -77,7 +76,6 @@ export class ParticipantRegisterationForm implements OnInit {
         error: (err) => console.error('Failed to add participant', err)
       });
     }
-    // route back
     
     
   }
