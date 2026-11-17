@@ -56,7 +56,7 @@
                         <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29;">
                             <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
                                 <tr>
-                                    <th class="ps-4 py-3">Id</th>
+                                    <th class="ps-4 py-3"></th>
                                     <th class="py-3">Name</th>
                                     <th class="py-3">BIC</th>
                                     <th class="py-3">Shorthand</th>
@@ -70,7 +70,16 @@
                             <tbody>
                                 @for (item of filteredBanks(); track item.id) {
                                     <tr>
-                                        <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
+                                        <th class="ps-4 fw-semibold text-secondary">
+                                            <div class="d-flex justify-content-center align-items-center p-2">
+                                                <div class="position-relative">
+                                                    <img [src]="'http://localhost:9081' + item.logoPath + '?v=' + logoVersion()" 
+                                                        [alt]="item.shortName" 
+                                                        class="rounded-circle img-thumbnail bg-info bg-opacity-25 shadow-sm" 
+                                                        style="width: 60px; height: 60px; object-fit: cover;">
+                                                </div>
+                                            </div>
+                                        </th>
                                         <td class="fw-medium text-dark">{{item.name}}</td>
                                         <td>
                                             <code class="text-indigo fw-bold" style="color: #4338CA;">{{item.bic}}</code>

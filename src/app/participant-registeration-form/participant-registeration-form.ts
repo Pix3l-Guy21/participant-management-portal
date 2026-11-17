@@ -4,7 +4,7 @@ import { ParticipantService } from '../participant-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AlertCard } from '../alert-card/alert-card';
-import { StatusBanner } from '../status-banner/status-banner';
+import { of, switchMap } from 'rxjs';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, AlertCard],
@@ -17,6 +17,10 @@ export class ParticipantRegisterationForm implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
+  formData = new FormData();
+  selectedFile: File | null = null;
+  imagePreview = signal<string | ArrayBuffer | null>(null);
+  
   dismissed = output<void>();
 
   participantForm = this.formBuilder.group({
@@ -26,8 +30,9 @@ export class ParticipantRegisterationForm implements OnInit {
     shortName: ['', Validators.required],
     address: ['', Validators.required],
     phoneNumber: ['', [Validators.required, Validators.minLength(9)]],
-    status: [false]
-  })
+    status: [false],
+    logo: this.formBuilder.control<File | null>(null)
+  });
   
   private bankId = this.activatedRoute.snapshot.params['id'] || 0;
 
@@ -45,6 +50,26 @@ export class ParticipantRegisterationForm implements OnInit {
     this.participantForm.get(field)?.setValue(value);
   }
 
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    
+    if (file) {
+      this.selectedFile = file;
+      this.participantForm.patchValue({ logo: file });
+      this.participantForm.get('logo')?.markAsTouched();
+      const logoFile = this.selectedFile;
+      if(logoFile) {
+        this.formData.append('logo', logoFile)
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+          this.imagePreview.set(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+  }
+
   executeEdit(){
     const formattedPhoneNumber = "+251".concat(this.getField('phoneNumber')?.value.toString());
     this.pService.updateParticipant(this.bankId, {
@@ -55,7 +80,14 @@ export class ParticipantRegisterationForm implements OnInit {
         email: this.getField('email')?.value,
         phoneNumber: formattedPhoneNumber,
         status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
-      }).subscribe({
+      }).pipe(
+        switchMap(() => {
+          const participantId = this.bankId;
+          return this.selectedFile
+            ? this.pService.addLogo(participantId, this.formData)
+            : of(true);
+        })
+      ).subscribe({
           next: () => {
           this.pService.bannerType.set("success");
           this.pService.bannerMessage.set("Saved changes successfully.");
@@ -66,7 +98,7 @@ export class ParticipantRegisterationForm implements OnInit {
 
   onSubmit(){
     this.submitted.set(true);
-
+    
     if(this.isEditMode()){
       this.confirmEdit.set(true);
     } else {
@@ -79,7 +111,14 @@ export class ParticipantRegisterationForm implements OnInit {
         email: this.getField('email')?.value,
         phoneNumber: formattedPhoneNumber,
         status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
-      }).subscribe({
+      }).pipe(
+        switchMap((createdParticipant: any) => {
+          const participantId = createdParticipant.institution.id;
+          return this.selectedFile
+            ? this.pService.addLogo(participantId, this.formData)
+            : of(true);
+        })
+      ).subscribe({
         next: () => {
           this.pService.bannerType.set("success");
           this.pService.bannerMessage.set("New participant added successfully.");

@@ -6,5 +6,6 @@ export interface Participants {
     address: string;
     email: string;
     phoneNumber: string;
+    logoPath: File | null;
     status: 'ACTIVE' | 'INACTIVE';
 }

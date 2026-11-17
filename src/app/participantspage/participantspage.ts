@@ -32,6 +32,7 @@ export class Participantspage {
   errorMessage = signal<string | null>(null);
 
   banks = signal<Participants[]>([]);
+  logoVersion = signal(Date.now());
 
   filteredBanks = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -50,6 +51,7 @@ export class Participantspage {
       finalize(() => this.isLoading.set(false))
     ).subscribe({
       next: (data) => {
+        this.logoVersion.set(Date.now());
         this.banks.set(data);
       },
       error: () => this.loadingError.set("Failed to load data.")
@@ -58,7 +60,6 @@ export class Participantspage {
 
   ngOnInit(): void {
     this.loadParticipants();
-
     if (this.timer) {
       clearTimeout(this.timer);
     }

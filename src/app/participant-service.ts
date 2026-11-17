@@ -17,13 +17,23 @@ export class ParticipantService {
         map(response => response.institutions)
       );
   }
-  public addParticipant(body: Omit<Participants, 'id'>): Observable<Participants> {
+  public addParticipant(body: Omit<Participants, 'id' | 'logoPath'>): Observable<Participants> {
     return this.http.post<Participants>(this.baseUrl, body)
+  }
+
+  public addLogo(id: number, logo: FormData): Observable<boolean> {
+    return this.http.post<{status: string}>(`${this.baseUrl}/${id}/logo`, logo).pipe(
+      map(res => res.status === 'SUCCESS')
+    )
   }
 
   public getParticipantById(id: number): Observable<Participants> {
      return this.http.get<Participants>(`${this.baseUrl}/${id}`);
   }
+
+  // public getParticipantByBic(bic: string): Observable<Participants> {
+  //   return this.http.get<Participants>(`${this.baseUrl}/bic/${bic}`);
+  // }
 
   public updateParticipant(id: number, updatedData: Partial<Participants>): Observable<boolean> {
     return this.http.put<{status: string}> (`${this.baseUrl}/${id}`, updatedData).pipe(
