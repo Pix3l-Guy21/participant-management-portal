@@ -27,77 +27,92 @@
                     </button>
                 </div>
             </div>
-            
+            @if (participantToDelete() !== null) {
+                <app-alert-card 
+                    type="warning" 
+                    title="Confirm Deletion" 
+                    [isModal]="true" 
+                    [dismissible]="true" 
+                    (dismissed)="cancelDelete()">
+                    
+                    <p>Are you sure you want to delete this record? This action cannot be undone.</p>
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cancelDelete()">Cancel</button>
+                        <button class="btn btn-danger btn-sm" (click)="executeDelete()">Yes, Delete</button>
+                    </div>
+                </app-alert-card>
+            }
             <div class="table-responsive mb-0">
                 @if (isLoading()) {
-                    <div class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="text-muted mt-2">Loading participants...</p>
-                    </div>
+                    <app-loading-spinner message="Loading Participants..."></app-loading-spinner>
                 }
                 @else {
-                    <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29;">
-                        <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
-                            <tr>
-                                <th class="ps-4 py-3">Id</th>
-                                <th class="py-3">Name</th>
-                                <th class="py-3">BIC</th>
-                                <th class="py-3">Shorthand</th>
-                                <th class="py-3">Address</th>
-                                <th class="py-3">Email</th>
-                                <th class="py-3">Phone Number</th>
-                                <th class="text-center pe-4 py-3">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (item of filteredBanks(); track item.id) {
+                    @if (!loadingError() && filteredBanks().length === 0) {
+                        <p class="mx-2 p-3 text-center" style="color: #D9531E">No participant banks found</p>
+                    } @else if(loadingError()) {
+                        <p class="mx-2 p-3 text-center" style="color: #D9531E">Unable to load participants.</p>
+                    } @else {
+                        <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29;">
+                            <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
                                 <tr>
-                                    <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
-                                    <td class="fw-medium text-dark">{{item.name}}</td>
-                                    <td>
-                                        <code class="text-indigo fw-bold" style="color: #4338CA;">{{item.bic}}</code>
-                                    </td>
-                                    <td class="text-muted">{{item.shortName}}</td>
-                                    <td class="text-muted">{{item.address}}</td>
-                                    <td>
-                                        <a href="mailto:{{item.email}}" class="text-decoration-none text-primary">{{item.email}}</a>
-                                    </td>
-                                    <td class="text-muted">{{item.phoneNumber}}</td>
-                                    <td class="text-center pe-4">
-                                        <span class="badge rounded-pill px-3 py-2 fw-semibold" [ngClass]="{
-                                            'bg-success bg-opacity-10 text-success': item.status === 'ACTIVE',
-                                            'bg-secondary bg-opacity-25 text-secondary': item.status === 'INACTIVE'
-                                        }">
-                                            {{item.status}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button class="btn-sm border-0 rounded-pill px-2" 
-                                            style="background-color: #e9631a; color: #fff"
-                                            type="button" (click)="participantEdit(item.id)">
-                                                Edit
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button class="btn-sm border-0 rounded-pill px-2" 
-                                            style="background-color: #a72406; color: #fff"
-                                            type="button" (click)="deleteParticipant(item.id)">
-                                                Delete
-                                        </button>
-                                    </td>
+                                    <th class="ps-4 py-3">Id</th>
+                                    <th class="py-3">Name</th>
+                                    <th class="py-3">BIC</th>
+                                    <th class="py-3">Shorthand</th>
+                                    <th class="py-3">Address</th>
+                                    <th class="py-3">Email</th>
+                                    <th class="py-3">Phone Number</th>
+                                    <th class="text-center pe-4 py-3">Status</th>
+                                    <th class="py-3">Action</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (item of filteredBanks(); track item.id) {
+                                    <tr>
+                                        <th class="ps-4 fw-semibold text-secondary">{{item.id}}</th>
+                                        <td class="fw-medium text-dark">{{item.name}}</td>
+                                        <td>
+                                            <code class="text-indigo fw-bold" style="color: #4338CA;">{{item.bic}}</code>
+                                        </td>
+                                        <td class="text-muted">{{item.shortName}}</td>
+                                        <td class="text-muted">{{item.address}}</td>
+                                        <td>
+                                            <a href="mailto:{{item.email}}" class="text-decoration-none text-primary">{{item.email}}</a>
+                                        </td>
+                                        <td class="text-muted">{{item.phoneNumber}}</td>
+                                        <td class="text-center pe-4">
+                                            <span class="badge rounded-pill px-3 py-2 fw-semibold" [ngClass]="{
+                                                'bg-success bg-opacity-10 text-success': item.status === 'ACTIVE',
+                                                'bg-secondary bg-opacity-25 text-secondary': item.status === 'INACTIVE'
+                                            }">
+                                                {{item.status}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn border-0 btn-outline-info" 
+                                                    type="button" (click)="participantEdit(item.id)">
+                                                    <i class="bi bi-pencil-square"></i> 
+                                                </button>
+                                            
+                                                <button class="btn border-0 btn-outline-danger" 
+                                                    type="button" (click)="confirmDelete(item.id)">
+                                                        <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
                 }
-                @if (!loadingError() && filteredBanks().length === 0) {
-                    <p class="mx-2 p-3 text-center" style="color: #D9531E">No participant banks found</p>
-                } @else if(loadingError()) {
-                    <p class="mx-2 p-3 text-center" style="color: #D9531E">Unable to load participants.</p>
-                }
+                
             </div>
         </div>
     </div>
+    @if(bannerType()){
+        <app-status-banner [type]="bannerType()" [message]="bannerMessage()"></app-status-banner>
+    }
 </div>

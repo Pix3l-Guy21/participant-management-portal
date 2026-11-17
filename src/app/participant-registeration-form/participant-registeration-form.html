@@ -7,6 +7,22 @@
                 <h3 class="fw-bold">Edit Participant detail</h3>
                 <p class="small">Please edit the form properly.</p>
             </div>
+            @if(confirmEdit()){
+                <app-alert-card 
+                    type="info" 
+                    title="Confirm Edit" 
+                    [isModal]="true" 
+                    [dismissible]="true"
+                    (dismissed)="confirmEdit.set(false)">
+                    
+                    <p>Are you sure you want to save changes?</p>
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button class="btn btn-outline-secondary btn-sm" (click)="confirmEdit.set(false)">Cancel</button>
+                        <button class="btn btn-info btn-sm" (click)="executeEdit()">Save Changes</button>
+                    </div>
+                </app-alert-card>
+            }
         }
         @else {
             <div style="color: #ebebdf; background-color: #e9631a;" class="p-3 rounded-top-3">

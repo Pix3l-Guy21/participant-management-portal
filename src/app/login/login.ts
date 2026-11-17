@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth-service';
 import { Router } from '@angular/router';
+import { ParticipantService } from '../participant-service';
 
 @Component({
   imports: [FormsModule],
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class Login {
   private loginService = inject(AuthService);
   private router = inject(Router);
+  private pService = inject(ParticipantService);
   
   username = '';
   password = '';
@@ -22,6 +24,8 @@ export class Login {
     this.loginService.login(this.username, this.password);
     this.submitted.set(true);
     if (!this.errorMessage()) {
+      this.pService.bannerType.set("success");
+      this.pService.bannerMessage.set("Welcome back.");
       this.router.navigate(['/participants']);
     }
   } 

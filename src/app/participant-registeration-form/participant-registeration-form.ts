@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ParticipantService } from '../participant-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Participants } from '../participants';
+import { AlertCard } from '../alert-card/alert-card';
+import { StatusBanner } from '../status-banner/status-banner';
 
 @Component({
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AlertCard],
   selector: 'app-participant-registeration-form',
   styleUrl: './participant-registeration-form.css',
   templateUrl: './participant-registeration-form.html',
@@ -16,6 +17,7 @@ export class ParticipantRegisterationForm implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
+  dismissed = output<void>();
 
   participantForm = this.formBuilder.group({
     name: ['', Validators.required],
@@ -31,6 +33,7 @@ export class ParticipantRegisterationForm implements OnInit {
 
   submitted = signal(false);
   isEditMode = signal(false);
+  confirmEdit = signal(false);
 
   // getter for each field
   getField(field: string){
@@ -42,14 +45,9 @@ export class ParticipantRegisterationForm implements OnInit {
     this.participantForm.get(field)?.setValue(value);
   }
 
-
-  onSubmit(){
-    this.submitted.set(true);
-
+  executeEdit(){
     const formattedPhoneNumber = "+251".concat(this.getField('phoneNumber')?.value.toString());
-
-    if(this.isEditMode()){
-      this.pService.updateParticipant(this.bankId, {
+    this.pService.updateParticipant(this.bankId, {
         name: this.getField('name')?.value,
         bic: this.getField('bic')?.value.toUpperCase(),
         shortName: this.getField('shortName')?.value,
@@ -58,11 +56,21 @@ export class ParticipantRegisterationForm implements OnInit {
         phoneNumber: formattedPhoneNumber,
         status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
       }).subscribe({
-          next: (ok) => {
+          next: () => {
+          this.pService.bannerType.set("success");
+          this.pService.bannerMessage.set("Saved changes successfully.");
           this.router.navigate(['/participants']);
         }
       });
+  }
+
+  onSubmit(){
+    this.submitted.set(true);
+
+    if(this.isEditMode()){
+      this.confirmEdit.set(true);
     } else {
+      const formattedPhoneNumber = "+251".concat(this.getField('phoneNumber')?.value.toString());
       this.pService.addParticipant({
         name: this.getField('name')?.value,
         bic: this.getField('bic')?.value.toUpperCase(),
@@ -72,12 +80,14 @@ export class ParticipantRegisterationForm implements OnInit {
         phoneNumber: formattedPhoneNumber,
         status: this.getField('status')?.value? 'ACTIVE': 'INACTIVE'
       }).subscribe({
-        next: () => this.router.navigate(['/participants']),
+        next: () => {
+          this.pService.bannerType.set("success");
+          this.pService.bannerMessage.set("New participant added successfully.");
+          this.router.navigate(['/participants']);
+        },
         error: (err) => console.error('Failed to add participant', err)
       });
     }
-    
-    
   }
 
   ngOnInit() {

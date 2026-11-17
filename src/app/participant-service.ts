@@ -1,15 +1,16 @@
-import { inject, Service } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { Participants } from './participants';
 import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL } from './app.config';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Service()
 export class ParticipantService {
-  // private participants: Participants[] = [];
-  private newParticipant!: Omit<Participants, 'id'>;
+  
   private http = inject(HttpClient);
   private baseUrl = API_BASE_URL.concat('/api/v1/participants');
+  bannerType = signal<'info' | 'success' | 'error' | 'warning' | null>(null);
+  bannerMessage = signal<string>('');
 
   public getParticipants(): Observable<Participants[]> {
     return this.http.get<{ institutions: Participants[] }>(`${this.baseUrl}`).pipe(

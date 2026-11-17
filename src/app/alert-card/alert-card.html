@@ -1,0 +1,18 @@
+<div class="modal-backdrop fade show"></div>
+
+<div class="modal fade show d-block" tabindex="-1" role="dialog" (click)="onBackdropClick()">
+    <div class="modal-dialog modal-dialog-centered" role="document" (click)="$event.stopPropagation()">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header" [class]="getHeaderClass()">
+                <h5 class="modal-title fw-bold">{{ title() }}</h5>
+                @if (dismissible()) {
+                    <button type="button" class="btn-close" aria-label="Close" (click)="onDismiss()"></button>
+                }
+            </div>
+        <div class="modal-body">
+            <ng-content></ng-content>
+        </div>
+        </div>
+    </div>
+</div>
+    
