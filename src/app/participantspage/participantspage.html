@@ -53,7 +53,7 @@
                     } @else if(loadingError()) {
                         <p class="mx-2 p-3 text-center" style="color: #D9531E">Unable to load participants.</p>
                     } @else {
-                        <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29;">
+                        <table class="table table-hover overflow-scroll align-middle mb-0" style="color: #2C2A29; min-width: 1250px;">
                             <thead style="background-color: #F1F5F9; color: #475569;" class="text-uppercase fs-7 text-secondary">
                                 <tr>
                                     <th class="ps-4 py-3"></th>
@@ -70,9 +70,9 @@
                             <tbody>
                                 @for (item of filteredBanks(); track item.id) {
                                     <tr>
-                                        <th class="ps-4 fw-semibold text-secondary">
+                                        <th class="ps-4 fw-semibold text-secondary" style="width: 90px;">
                                             <div class="d-flex justify-content-center align-items-center p-2">
-                                                <div class="position-relative">
+                                                <div class="position-relative flex-shrink-0">
                                                     <img [src]="'http://localhost:9081' + item.logoPath + '?v=' + logoVersion()" 
                                                         [alt]="item.shortName" 
                                                         class="rounded-circle img-thumbnail bg-info bg-opacity-25 shadow-sm" 

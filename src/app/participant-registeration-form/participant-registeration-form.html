@@ -119,23 +119,29 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="profilePicture" class="form-label">Upload Profile Picture</label>
-                <input 
-                    type="file" 
-                    id="profilePicture" 
-                    class="form-control" 
-                    accept="image/*"
-                    (change)="onFileSelected($event)"
-                />
+                <div class="mb-2">
+                    <label for="profilePicture" class="form-label">Upload Profile Picture</label>
+                    <input 
+                        type="file" 
+                        id="profilePicture" 
+                        class="form-control" 
+                        accept="image/*"
+                        (change)="onFileSelected($event)"
+                    />
+                </div>
+                @if (getField('logo')?.hasError('invalidImageType')){
+                    <div class="text-danger small mt-1">Please select a valid image file (JPEG, PNG, etc.).</div>
+                } @else if (getField('logo')?.hasError('maxFileSize')){
+                    <div class="text-danger small mt-1">File size must be less than 5MB.</div>
+                } @else if (imagePreview()){
+                    <div class="mb-3 text-center">
+                        <p class="text-muted small">Preview:</p>
+                        <img [src]="imagePreview()" alt="Profile Preview" class="rounded-circle img-thumbnail shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+                    </div>
+                }
             </div>
 
-        <!-- Live Image Preview -->
-            @if (imagePreview()){
-                <div class="mb-3 text-center">
-                    <p class="text-muted small">Preview:</p>
-                    <img [src]="imagePreview()" alt="Profile Preview" class="rounded-circle img-thumbnail shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
-                </div>
-            }
+            
             <div class="d-flex align-items-center justify-content-between">
                 <button class="btn text-white btn-lg py-2 mb-3 w-75 shadow-sm" style="background-color: #D9531E;" 
                     onmouseenter="this.style.backgroundColor='#BF4314'" 

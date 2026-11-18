@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, output, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ParticipantService } from '../participant-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -31,7 +31,7 @@ export class ParticipantRegisterationForm implements OnInit {
     address: ['', Validators.required],
     phoneNumber: ['', [Validators.required, Validators.minLength(9)]],
     status: [false],
-    logo: this.formBuilder.control<File | null>(null)
+    logo: [this.formBuilder.control<File | null>(null), this.imageValidator]
   });
   
   private bankId = this.activatedRoute.snapshot.params['id'] || 0;
@@ -48,6 +48,29 @@ export class ParticipantRegisterationForm implements OnInit {
   // setter for each field
   setField(field: string, value: string | null) {
     this.participantForm.get(field)?.setValue(value);
+  }
+
+  imageValidator(control: AbstractControl): ValidationErrors | null {
+    const file = control.value;
+    
+    if (!file) {
+      return null;
+    }
+
+    if (!(file instanceof File)) {
+      return { invalidFile: true };
+    }
+
+    if (!file.type.startsWith('image/')) {
+      return { invalidImageType: true };
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      return { maxFileSize: true };
+    }
+
+    return null;
   }
 
   onFileSelected(event: any) {
