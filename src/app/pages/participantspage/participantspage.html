@@ -2,7 +2,7 @@
     
     <nav class="navbar fixed-top px-4 py-3 shadow-sm" style="background-color: #e9631a; color: #ebebdf;">
         <h2 class="h5 mb-0 fw-bold">Participant Management Portal</h2>
-        <button class="btn btn-outline-light btn-sm px-3" role="button" (click)="logout()">Logout</button>
+        <button class="btn btn-outline-danger fw-bold btn-light btn-sm px-3" role="button" (click)="confirmLogout()">Logout</button>
     </nav>
 
     <div class="container-fluid mt-5 px-4 py-4">
@@ -13,7 +13,7 @@
                 <p class="small">Manage and review participant bank details below.</p>
             </div>
             <div class="p-4">
-                <a [routerLink]="['/participants/new']" style="background-color: #D9531E;" class="btn rounded-pill px-3 text-white">Add New Participant</a>
+                <a [routerLink]="['/participants/new']" style="background-color: #D9531E;" class="btn rounded-pill px-3 text-white">+ Add New Participant</a>
             </div>
         </div>
 
@@ -42,6 +42,19 @@
                         <button class="btn btn-danger btn-sm" (click)="executeDelete()">Yes, Delete</button>
                     </div>
                 </app-alert-card>
+            } @else if (checkLogout()){
+                <app-alert-card
+                    type="error" 
+                    title="Confirm Logout" 
+                    [isModal]="true" 
+                    [dismissible]="true" 
+                    (dismissed)="cancelLogout()">
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cancelLogout()">Cancel</button>
+                        <button class="btn btn-danger btn-sm" (click)="executeLogout()">Logout</button>
+                    </div>
+            </app-alert-card>
             }
             <div class="table-responsive mb-0">
                 @if (isLoading()) {

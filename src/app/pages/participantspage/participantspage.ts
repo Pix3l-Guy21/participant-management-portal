@@ -28,6 +28,7 @@ export class Participantspage {
   loadingError = signal('');
   bannerType = this.nService.type;
   bannerMessage = this.nService.message;
+  checkLogout = signal(false);
   
   participantToDelete = signal<number | null>(null);
   successMessage = signal<string | null>(null);
@@ -76,8 +77,14 @@ export class Participantspage {
       clearTimeout(this.timer);
     }
   }
-  
-  public logout() {
+
+  public confirmLogout(){
+    this.checkLogout.set(true);
+  }
+  public cancelLogout(){
+    this.checkLogout.set(false);
+  }
+  public executeLogout() {
     this.router.navigate(['/login']);
   }
 
@@ -102,8 +109,8 @@ export class Participantspage {
       () => {
         this.participantToDelete.set(null);
         this.successMessage.set('Record deleted successfully');
-        this.pService.bannerType.set('error');
-        this.pService.bannerMessage.set('Participant Deleted.');
+        this.nService.type.set('error');
+        this.nService.message.set('Participant Deleted.');
         if (this.timer) {
           clearTimeout(this.timer);
         }
