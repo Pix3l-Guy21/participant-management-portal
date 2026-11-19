@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../auth-service';
+import { AuthService } from '@services/auth/auth-service';
 import { Router } from '@angular/router';
-import { ParticipantService } from '../participant-service';
+import { ParticipantService } from '@services/participant/participant-service';
 
 @Component({
   imports: [FormsModule],

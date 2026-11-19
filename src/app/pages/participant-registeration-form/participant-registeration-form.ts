@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { ParticipantService } from '../participant-service';
+import { ParticipantService } from '@services/participant/participant-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AlertCard } from '../alert-card/alert-card';
+import { AlertCard } from '@sharedComponents/alert-card/alert-card';
 import { of, switchMap } from 'rxjs';
+import { Notification } from '@services/notification/notification';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, AlertCard],
@@ -13,7 +14,10 @@ import { of, switchMap } from 'rxjs';
   templateUrl: './participant-registeration-form.html',
 })
 export class ParticipantRegisterationForm implements OnInit {
+
   private pService = inject(ParticipantService);
+  private nService = inject(Notification);
+
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
@@ -31,7 +35,7 @@ export class ParticipantRegisterationForm implements OnInit {
     address: ['', Validators.required],
     phoneNumber: ['', [Validators.required, Validators.minLength(9)]],
     status: [false],
-    logo: [this.formBuilder.control<File | null>(null), this.imageValidator]
+    logo: this.formBuilder.control<File | null>(null, this.imageValidator)
   });
   
   private bankId = this.activatedRoute.snapshot.params['id'] || 0;
@@ -82,7 +86,7 @@ export class ParticipantRegisterationForm implements OnInit {
       this.participantForm.get('logo')?.markAsTouched();
       const logoFile = this.selectedFile;
       if(logoFile) {
-        this.formData.append('logo', logoFile)
+        this.formData.set('logo', logoFile)
       }
       const reader = new FileReader();
       reader.onload = () => {
@@ -112,8 +116,8 @@ export class ParticipantRegisterationForm implements OnInit {
         })
       ).subscribe({
           next: () => {
-          this.pService.bannerType.set("success");
-          this.pService.bannerMessage.set("Saved changes successfully.");
+          this.nService.type.set("success");
+          this.nService.message.set("Saved changes successfully.");
           this.router.navigate(['/participants']);
         }
       });
@@ -143,8 +147,8 @@ export class ParticipantRegisterationForm implements OnInit {
         })
       ).subscribe({
         next: () => {
-          this.pService.bannerType.set("success");
-          this.pService.bannerMessage.set("New participant added successfully.");
+          this.nService.type.set("success");
+          this.nService.message.set("New participant added successfully.");
           this.router.navigate(['/participants']);
         },
         error: (err) => console.error('Failed to add participant', err)

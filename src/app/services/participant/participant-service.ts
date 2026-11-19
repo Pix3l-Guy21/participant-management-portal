@@ -1,7 +1,7 @@
 import { inject, Service, signal } from '@angular/core';
-import { Participants } from './participants';
+import { Participants } from '@interfaces/participants';
 import { HttpClient } from '@angular/common/http';
-import { API_BASE_URL } from './app.config';
+import { API_BASE_URL } from '../../app.config';
 import { map, Observable } from 'rxjs';
 
 @Service()

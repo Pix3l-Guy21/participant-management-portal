@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Participantspage } from './participantspage/participantspage';
-import { ParticipantRegisterationForm } from './participant-registeration-form/participant-registeration-form';
+import { Login } from './pages/login/login';
+import { Participantspage } from './pages/participantspage/participantspage';
+import { ParticipantRegisterationForm } from './pages/participant-registeration-form/participant-registeration-form';
 
 export const routes: Routes = [
     {path: 'login', component: Login},

@@ -1,13 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Participants } from '../participants';
+import { Participants } from '@interfaces/participants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ParticipantService } from '../participant-service';
+import { ParticipantService } from '@services/participant/participant-service';
 import { finalize } from 'rxjs';
-import { AlertCard } from '../alert-card/alert-card';
-import { LoadingSpinner } from '../loading-spinner/loading-spinner';
-import { StatusBanner } from '../status-banner/status-banner';
+import { AlertCard } from '@sharedComponents/alert-card/alert-card';
+import { LoadingSpinner } from '@sharedComponents/loading-spinner/loading-spinner';
+import { StatusBanner } from '@sharedComponents/status-banner/status-banner';
+import { Notification } from '@services/notification/notification';
 
 @Component({
   imports: [CommonModule, FormsModule, RouterLink, AlertCard, LoadingSpinner, StatusBanner],
@@ -19,13 +20,14 @@ export class Participantspage {
   
   private router = inject(Router);
   private pService = inject(ParticipantService);
+  private nService = inject(Notification)
   timer: any = null;
 
   isLoading = signal(true);
   searchTerm = signal('');
   loadingError = signal('');
-  bannerType = this.pService.bannerType;
-  bannerMessage = this.pService.bannerMessage;
+  bannerType = this.nService.type;
+  bannerMessage = this.nService.message;
   
   participantToDelete = signal<number | null>(null);
   successMessage = signal<string | null>(null);
