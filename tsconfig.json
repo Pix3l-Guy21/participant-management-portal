@@ -16,7 +16,8 @@
     "paths": {
       "@services/*": ["./src/app/services/*"],
       "@interfaces/*": ["./src/app/interfaces/*"],
-      "@sharedComponents/*": ["./src/app/shared/components/*"]
+      "@sharedComponents/*": ["./src/app/shared/components/*"],
+      "@environment/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {

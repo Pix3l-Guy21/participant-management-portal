@@ -2,14 +2,15 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Service, signal } from '@angular/core';
 import { AuthResponse } from '@interfaces/auth-response';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { API_BASE_URL } from '../../app.config';
 import { Router } from '@angular/router';
 import { getErrorMessage } from '../../interceptors/error-interceptor';
+import { environment } from '@environment/environment';
 
 @Service()
 export class AuthService {
     private router = inject(Router);
     private http = inject(HttpClient);
+    apiUrl = environment.apiUrl
     tokenSignal = signal<string | null>(sessionStorage.getItem('access_token'));
     errorMessage = signal<string | null>(null);
     private tokenTimer: ReturnType<typeof setTimeout> | null = null;
@@ -22,7 +23,7 @@ export class AuthService {
     }
 
     public login(credentials: {username: string, password: string, grant_type: "password", client_id: "acs_apis_client_api"}): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${API_BASE_URL}/auth/login`, credentials).pipe(
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
             tap(response => {
                 this.saveToken(response.access_token);
                 this.errorMessage.set(null);

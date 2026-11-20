@@ -1,14 +1,14 @@
 import { inject, Service, signal } from '@angular/core';
 import { Participants } from '@interfaces/participants';
 import { HttpClient } from '@angular/common/http';
-import { API_BASE_URL } from '../../app.config';
 import { map, Observable } from 'rxjs';
+import { environment } from '@environment/environment';
 
 @Service()
 export class ParticipantService {
   
   private http = inject(HttpClient);
-  private baseUrl = API_BASE_URL.concat('/participants');
+  private baseUrl = environment.apiUrl.concat('/participants');
   bannerType = signal<'info' | 'success' | 'error' | 'warning' | null>(null);
   bannerMessage = signal<string>('');
 
