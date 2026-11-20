@@ -15,18 +15,18 @@ import { Notification } from '@services/notification/notification';
 export class Login {
   private loginService = inject(AuthService);
   private router = inject(Router);
-  private pService = inject(ParticipantService);
   private nService = inject(Notification);
   
-  username = '';
-  password = '';
+  username = signal('');
+  password = signal('');
   submitted = signal(false);
   errorMessage = this.loginService.errorMessage;
   onSubmit() {
     this.submitted.set(true);
+    this.errorMessage.set(null)
     this.loginService.login({
-      username: this.username,
-      password: this.password,
+      username: this.username(),
+      password: this.password(),
       grant_type: "password",
       client_id: "acs_apis_client_api",
     }).subscribe(() => {
