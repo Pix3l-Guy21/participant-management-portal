@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '@services/auth/auth-service';
 import { Router } from '@angular/router';
 import { ParticipantService } from '@services/participant/participant-service';
+import { Notification } from '@services/notification/notification';
 
 @Component({
   imports: [FormsModule],
@@ -15,18 +16,27 @@ export class Login {
   private loginService = inject(AuthService);
   private router = inject(Router);
   private pService = inject(ParticipantService);
+  private nService = inject(Notification);
   
   username = '';
   password = '';
   submitted = signal(false);
   errorMessage = this.loginService.errorMessage;
   onSubmit() {
-    this.loginService.login(this.username, this.password);
     this.submitted.set(true);
-    if (!this.errorMessage()) {
-      this.pService.bannerType.set("success");
-      this.pService.bannerMessage.set("Welcome back.");
-      this.router.navigate(['/participants']);
-    }
+    this.loginService.login({
+      username: this.username,
+      password: this.password,
+      grant_type: "password",
+      client_id: "acs_apis_client_api",
+    }).subscribe(() => {
+      if (!this.errorMessage()) {
+        this.nService.type.set("success");
+        this.nService.message.set("Welcome back.");
+        this.router.navigate(['/participants']);
+        
+      }
+    });
+    
   } 
 }

@@ -9,6 +9,7 @@ import { AlertCard } from '@sharedComponents/alert-card/alert-card';
 import { LoadingSpinner } from '@sharedComponents/loading-spinner/loading-spinner';
 import { StatusBanner } from '@sharedComponents/status-banner/status-banner';
 import { Notification } from '@services/notification/notification';
+import { AuthService } from '@services/auth/auth-service';
 
 @Component({
   imports: [CommonModule, FormsModule, RouterLink, AlertCard, LoadingSpinner, StatusBanner],
@@ -20,7 +21,9 @@ export class Participantspage {
   
   private router = inject(Router);
   private pService = inject(ParticipantService);
-  private nService = inject(Notification)
+  private nService = inject(Notification);
+  private authService = inject(AuthService);
+
   timer: any = null;
 
   isLoading = signal(true);
@@ -56,6 +59,7 @@ export class Participantspage {
       next: (data) => {
         this.logoVersion.set(Date.now());
         this.banks.set(data);
+        console.log(this.bannerType(), this.bannerMessage())
       },
       error: () => this.loadingError.set("Failed to load data.")
     });
@@ -85,7 +89,7 @@ export class Participantspage {
     this.checkLogout.set(false);
   }
   public executeLogout() {
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 
   filterResults(text: string) {
