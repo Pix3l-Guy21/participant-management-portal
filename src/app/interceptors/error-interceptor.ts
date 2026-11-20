@@ -6,7 +6,7 @@ import { catchError, throwError } from 'rxjs';
 const defaultErrorMessages: Record<number, string> = {
   0: 'Unable to connect to the server. Please check your internet connection.',
   400: 'The request was invalid.',
-  401: 'You are not authorized. Please sign in and try again.',
+  401: 'You are not authorized or session expired. Please sign in and try again.',
   403: 'You do not have permission to perform this action.',
   404: 'The requested resource could not be found.',
   408: 'The request timed out. Please try again.',

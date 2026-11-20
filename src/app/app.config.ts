@@ -5,7 +5,7 @@ import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/ht
 import { errorInterceptor } from './interceptors/error-interceptor';
 import { authInterceptor } from './interceptors/auth-interceptor';
 
-export const API_BASE_URL = 'http://localhost:9081';
+export const API_BASE_URL = 'http://localhost:9081/api/v1';
 
 export const appConfig: ApplicationConfig = {
   providers: [

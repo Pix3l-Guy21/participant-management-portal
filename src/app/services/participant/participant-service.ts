@@ -8,7 +8,7 @@ import { map, Observable } from 'rxjs';
 export class ParticipantService {
   
   private http = inject(HttpClient);
-  private baseUrl = API_BASE_URL.concat('/api/v1/participants');
+  private baseUrl = API_BASE_URL.concat('/participants');
   bannerType = signal<'info' | 'success' | 'error' | 'warning' | null>(null);
   bannerMessage = signal<string>('');
 
